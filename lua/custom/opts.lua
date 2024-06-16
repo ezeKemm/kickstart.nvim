@@ -11,3 +11,7 @@ vim.opt.termguicolors = true -- optionally enable 24-bit color
 vim.opt.hlsearch = false
 -- vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.opt.wrap = false
+
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 4

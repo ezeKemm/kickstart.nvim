@@ -54,7 +54,7 @@ vim.keymap.set('n', '<leader>S', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 
 -- TODO: Look into this bind
 -- create cli executables from script inside vim
-vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true, desc = 'Create executable' })
+-- vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true, desc = 'Create executable' })
 
 -- <leader>sn does this better?
 -- vim.keymap.set('n', '<leader>vpp', '<cmd>e ~/.dotfiles/nvim/.config/nvim/lua/theprimeagen/packer.lua<CR>')
@@ -62,7 +62,7 @@ vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true, desc =
 vim.keymap.set('n', '<leader>mr', '<cmd>CellularAutomaton make_it_rain<CR>')
 
 -- auto shoutout (source)
-vim.keymap.set('n', '<leader>o', '<cmd>so<CR>', { desc = 'Sh[o]ut out / Source' })
+-- vim.keymap.set('n', '<leader>o', '<cmd>so<CR>', { desc = 'Sh[o]ut out / Source' })
 
 -- Additional toggle comment bind, more accessible
 vim.keymap.set('n', '<leader>/', '<Plug>(comment_toggle_linewise_current)', { desc = 'Togg[/]e comment' })
