@@ -52,4 +52,38 @@ return {
     --   require('nvim-spotify').setup({}, {})
     -- end,
   },
+  {
+    'saecki/crates.nvim',
+    dependencies = 'hrsh7th/nvim-cmp',
+    ft = { 'rust', 'toml' },
+    config = function(_, opts)
+      local crates = require 'crates'
+      crates.setup(opts)
+      crates.show()
+    end,
+  },
+  {
+    'alexghergh/nvim-tmux-navigation',
+    config = function()
+      require('nvim-tmux-navigation').setup {
+        disable_when_zoomed = true, -- defaults to false
+        keybindings = {
+          left = '<C-h>',
+          down = '<C-j>',
+          up = '<C-k>',
+          right = '<C-l>',
+          last_active = '<C-\\>',
+          next = '<C-Space>',
+        },
+      }
+    end,
+  },
+  {
+    'MysticalDevil/inlay-hints.nvim',
+    event = 'LspAttach',
+    dependencies = { 'neovim/nvim-lspconfig' },
+    config = function()
+      require('inlay-hints').setup()
+    end,
+  },
 }
