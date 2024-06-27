@@ -13,8 +13,8 @@ return {
         javascriptreact = { 'eslint_d' },
         typescript = { 'eslint_d' },
         typescriptreact = { 'eslint_d' },
-        html = { 'ast-grep' },
-        css = { 'ast-grep' },
+        html = { 'sonarlint-language-server', 'ast-grep' },
+        css = { 'stylelint', 'ast-grep' },
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,

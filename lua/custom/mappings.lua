@@ -1,3 +1,4 @@
+vim.keymap.set('n', 'x', '"_x')
 vim.keymap.set('n', ';', ':', { desc = 'Enter cmdline' })
 -- Jumping up the page centers cursor
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Jump up half a page' })
@@ -42,12 +43,13 @@ vim.keymap.set('n', 'Q', '<nop>')
 -- vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, { desc = '[F]ormat' })
 
--- TODO: FIX THIS
--- quick fix navigation
-vim.keymap.set('n', '<M-k>', '<cmd>cnext<CR>zz', { desc = 'Move up quick fix list' })
-vim.keymap.set('n', '<M-j>', '<cmd>cprev<CR>zz', { desc = 'Move down quick fix list' })
-vim.keymap.set('n', '<M-K>', '<cmd>lnext<CR>zz', { desc = 'Move up quick fix location list' })
-vim.keymap.set('n', '<M-J>', '<cmd>lprev<CR>zz', { desc = 'Move down quick fix location list' })
+-- NOTE: visually, moving up and down is the reverse of up and down
+-- the quickfix list: so moving down visually is moving up the list
+-- this is configured for visual continuity
+vim.keymap.set('n', '<M-k>', '<cmd>cprev<CR>zz', { desc = 'Move up quick fix list' })
+vim.keymap.set('n', '<M-j>', '<cmd>cnext<CR>zz', { desc = 'Move down quick fix list' })
+vim.keymap.set('n', '<M-K>', '<cmd>lprev<CR>zz', { desc = 'Move up quick fix location list' })
+vim.keymap.set('n', '<M-J>', '<cmd>lnext<CR>zz', { desc = 'Move down quick fix location list' })
 
 -- replace the word cursor is on
 vim.keymap.set('n', '<leader>S', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Substitute word on cursor' })
@@ -84,3 +86,8 @@ vim.keymap.set('n', '<leader>tu', vim.cmd.UndotreeToggle, { desc = '[U]ndo[T]ree
 
 vim.keymap.set('n', '<leader>su', '<cmd>Telescope undo<cr>', { desc = '[S]earch [U]ndo Tree' })
 vim.keymap.set('n', '<S-CR>', '<cmd>w<cr>', { desc = ' Write to file' })
+
+-- HACK: something is fucked
+vim.keymap.del('n', 'gra')
+vim.keymap.del('n', 'grn')
+vim.keymap.del('n', 'grn')
