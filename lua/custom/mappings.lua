@@ -87,7 +87,7 @@ vim.keymap.set('n', '<leader>tu', vim.cmd.UndotreeToggle, { desc = '[U]ndo[T]ree
 vim.keymap.set('n', '<leader>su', '<cmd>Telescope undo<cr>', { desc = '[S]earch [U]ndo Tree' })
 vim.keymap.set('n', '<S-CR>', '<cmd>w<cr>', { desc = ' Write to file' })
 
--- HACK: something is fucked
-vim.keymap.del('n', 'gra')
-vim.keymap.del('n', 'grn')
-vim.keymap.del('n', 'grn')
+-- -- HACK: something is fucked
+-- vim.keymap.del('n', 'gra')
+-- vim.keymap.del('n', 'grn')
+-- vim.keymap.del('n', 'grn')
