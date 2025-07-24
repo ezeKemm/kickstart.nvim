@@ -1,7 +1,22 @@
 return {
   'tanvirtin/monokai.nvim',
   'ray-x/aurora',
-  { 'catppuccin/nvim', name = 'catppuccin', priority = 1000 },
+  {
+    'catppuccin/nvim',
+    name = 'catppuccin',
+    opts = {
+      term_colors = true,
+      transparent_background = true,
+    },
+    priority = 1000,
+    integrations = {
+      indent_blankline = {
+        enabled = true,
+        scope_color = '',
+        colored_indent_levels = true,
+      },
+    },
+  },
   { 'nyoom-engineering/oxocarbon.nvim' },
   { 'dasupradyumna/midnight.nvim', lazy = false, priority = 1000 },
   {

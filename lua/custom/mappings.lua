@@ -41,7 +41,16 @@ vim.keymap.set('i', '<C-c>', '<Esc>')
 vim.keymap.set('n', 'Q', '<nop>')
 -- dont have tmux so...
 -- vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+
+-- Formatting
 vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, { desc = '[F]ormat' })
+vim.keymap.set({ 'n', 'v' }, '<leader>F', function()
+  require('conform').format {
+    lsp_fallback = true,
+    async = false,
+    timeout_ms = 500,
+  }
+end, { desc = 'Conform.nvim Format' })
 
 -- NOTE: visually, moving up and down is the reverse of up and down
 -- the quickfix list: so moving down visually is moving up the list

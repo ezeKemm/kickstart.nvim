@@ -148,7 +148,7 @@ vim.opt.splitbelow = true
 --  See `:help 'list'`
 --  and `:help 'listchars'`
 vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = '  ', trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
@@ -278,30 +278,47 @@ require('lazy').setup({
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    config = function() -- This is the function that runs, AFTER loading
-      require('which-key').setup()
-
-      -- Document existing key chains
-      require('which-key').register {
-        ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-        ['<leader>d'] = { name = '[D]ebug', _ = 'which_key_ignore' },
-        ['<leader>l'] = { name = '[L]SP', _ = 'which_key_ignore' },
-        ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-        ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-        ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-        ['<leader>p'] = { name = '[P]roject', _ = 'which_key_ignore' },
-        ['<leader>t'] = { name = '[T]ree', _ = 'which_key_ignore' },
-        ['<leader>v'] = { name = '[V]im', _ = 'which_key_ignore' },
-        ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
-        ['<leader>u'] = { name = '[U]i', _ = 'which_key_ignore' },
-        ['<leader>m'] = { name = 'Auto[m]ata', _ = 'which_key_ignore' },
-        ['<leader>vq'] = { name = '[Q]uickfix', _ = 'which_key_ignore' },
-
-        ['s'] = { name = '[S]urround', _ = 'which_key_ignore' },
-        ['z'] = { name = 'Editor View', _ = 'which_key_ignore' },
-        ['g'] = { name = '[G]o-to', _ = 'which_key_ignore' },
-      }
-    end,
+    opts = {
+      delay = 0,
+      icons = {
+        mappings = vim.g.have_nerd_font,
+        keys = {},
+      },
+      spec = {
+        { '<leader>c', group = '[C]ode' },
+        { '<leader>c_', hidden = true },
+        { '<leader>d', group = '[D]ebug' },
+        { '<leader>d_', hidden = true },
+        { '<leader>g', group = '[G]it' },
+        { '<leader>g_', hidden = true },
+        { '<leader>l', group = '[L]SP' },
+        { '<leader>l_', hidden = true },
+        { '<leader>m', group = 'Auto[m]ata' },
+        { '<leader>m_', hidden = true },
+        { '<leader>p', group = '[P]roject' },
+        { '<leader>p_', hidden = true },
+        { '<leader>r', group = '[R]ename' },
+        { '<leader>r_', hidden = true },
+        { '<leader>s', group = '[S]earch' },
+        { '<leader>s_', hidden = true },
+        { '<leader>t', group = '[T]ree' },
+        { '<leader>t_', hidden = true },
+        { '<leader>u', group = '[U]i' },
+        { '<leader>u_', hidden = true },
+        { '<leader>v', group = '[V]im' },
+        { '<leader>v_', hidden = true },
+        { '<leader>vq', group = '[Q]uickfix' },
+        { '<leader>vq_', hidden = true },
+        { '<leader>w', group = '[W]orkspace' },
+        { '<leader>w_', hidden = true },
+        { 'g', group = '[G]o-to' },
+        { 'g_', hidden = true },
+        { 's', group = '[S]urround' },
+        { 's_', hidden = true },
+        { 'z', group = 'Editor View' },
+        { 'z_', hidden = true },
+      },
+    },
   },
 
   -- NOTE: Plugins can specify dependencies.
@@ -458,7 +475,13 @@ require('lazy').setup({
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim', opts = {
+        notification = {
+          window = {
+            winblend = 0,
+          },
+        },
+      } },
 
       -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
       -- used for completion, annotations and signatures of Neovim apis
@@ -488,7 +511,8 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        tsserver = {
+        -- WARN: problems with tsserver ... chaning to ts_ls seems to fix for now?
+        ts_ls = {
           -- Configure inlay hints for JS/TS
           settings = {
             typescript = {
@@ -658,12 +682,13 @@ require('lazy').setup({
           end
 
           -- Inlay hints
-          if opts.inlay_hints.enabled then
-            if client and client.server_capabilities.inlayHintProvider then
-              print 'inlay hints are available'
-              -- vim.lsp.inlay_hint.enable(0, true)
-            end
-          end
+          -- TODO: do i still need this?
+          -- if opts.inlay_hints.enabled then
+          --   if client and client.server_capabilities.inlayHintProvider then
+          --     print 'inlay hints are available'
+          --     -- vim.lsp.inlay_hint.enable(0, true)
+          --   end
+          -- end
         end,
       })
 
@@ -710,6 +735,8 @@ require('lazy').setup({
       require('mason-lspconfig').setup {
         handlers = {
           function(server_name)
+            -- fix for typescript language server
+            server_name = server_name == 'tsserver' and 'ts_ls' or server_name
             local server = servers[server_name] or {}
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
@@ -730,6 +757,20 @@ require('lazy').setup({
             end
             require('lspconfig')[server_name].setup(server)
           end,
+          ['svelte'] = function()
+            require('lspconfig')['svelte'].setup {
+              capabilities = capabilities,
+              on_attach = function(client, bufnr)
+                vim.api.nvim_create_autocmd('BufWritePost', {
+                  pattern = { '*.js', '*.ts' },
+                  callback = function(ctx)
+                    -- updates imports between svelte and ts/js files
+                    client.notify('$/onDidChangeTsOrJsFile', { uri = ctx.match })
+                  end,
+                })
+              end,
+            }
+          end,
         },
       }
     end,
@@ -738,7 +779,7 @@ require('lazy').setup({
   { -- Autoformat
     'stevearc/conform.nvim',
     opts = {
-      notify_on_error = false,
+      notify_on_error = true,
       format_on_save = function(bufnr)
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
@@ -746,18 +787,27 @@ require('lazy').setup({
         local disable_filetypes = { c = true, cpp = true }
         return {
           timeout_ms = 500,
+          async = false,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
         }
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        html = {},
         -- Conform can also run multiple formatters sequentially
         python = { 'isort', 'black' },
         --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
         javascript = { { 'prettierd', 'prettier' } },
+        typescript = { 'prettierd', 'prettier' },
+        javascriptreact = { 'prettierd', 'prettier' },
+        typescriptreact = { 'prettierd', 'prettier' },
+        svelte = { 'prettierd', 'prettier' },
+        css = { 'prettierd', 'prettier' },
+        html = { 'prettierd', 'prettier' },
+        json = { 'prettierd', 'prettier' },
+        yaml = { 'prettierd', 'prettier' },
+        markdown = { 'prettierd', 'prettier' },
       },
     },
   },
@@ -882,9 +932,21 @@ require('lazy').setup({
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       vim.cmd.colorscheme 'catppuccin'
+      vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
+      vim.cmd.hi 'CursorLine ctermbg=none guibg=#45475a gui=NONE cterm=NONE'
+      vim.api.nvim_create_autocmd('ColorScheme', {
+        pattern = '*',
+        group = vim.api.nvim_create_augroup('CursorLineTransparency', { clear = true }),
+        callback = function()
+          vim.cmd.hi 'CursorLine guibg=#45475a ctermbg=none'
+        end,
+      })
+      -- vim.cmd.augroup(CursorLineTransparency)
+      -- vim.api.nvim_set_hl(0, 'CursorLine', { bg = '#0f0f0f' })
     end,
   },
 
@@ -926,6 +988,9 @@ require('lazy').setup({
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
+
+      -- 4/25/2025 : Added mini.move
+      require('mini.move').setup()
     end,
   },
   { -- Highlight, edit, and navigate code

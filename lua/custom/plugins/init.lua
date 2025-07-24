@@ -86,4 +86,9 @@ return {
       require('inlay-hints').setup()
     end,
   },
+  {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    opts = {},
+  },
 }

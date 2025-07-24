@@ -18,3 +18,7 @@ vim.opt.softtabstop = 4
 
 vim.opt.path:append { '**' }
 vim.opt.wildignore:append { '*/node_modules/*' }
+
+-- Transparent editor
+-- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
