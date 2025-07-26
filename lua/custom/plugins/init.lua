@@ -19,13 +19,33 @@ return {
       },
       renderer = {
         group_empty = true,
+        icons = {
+          show = {
+            modified = true,
+          },
+        },
+      },
+      diagnostics = {
+        enable = true,
       },
       filters = {
-        dotfiles = true,
+        dotfiles = false,
+        git_clean = false,
+        exclude = {
+          '*.env.*',
+        },
+      },
+      git = {
+        enable = true,
+      },
+      modified = {
+        enable = true,
+        show_on_dirs = true,
+        show_on_open_dirs = false,
       },
     },
-    config = function()
-      require('nvim-tree').setup {}
+    config = function(_, opts)
+      require('nvim-tree').setup(opts)
       vim.keymap.set('n', '<leader>tt', '<cmd>:NvimTreeToggle<CR>', { desc = 'Toggle NvimTree' })
     end,
   },
